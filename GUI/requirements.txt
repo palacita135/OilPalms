@@ -1,0 +1,13 @@
+PyQt5
+PyQtWebEngine
+folium
+pandas
+geopandas
+scikit-learn
+matplotlib
+numpy
+shapely
+jinja2
+Flask
+opencv-python
+Pillow

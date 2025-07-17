@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Oil Palm Annotation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <style>
+        html, body, #map {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        .save-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            background-color: white;
+            padding: 6px 12px;
+            border: 1px solid gray;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <button class="save-button" onclick="saveGeoJSON()">💾 Save</button>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script>
+        const imgWidth = 9755;
+        const imgHeight = 8912;
+        const imageBounds = [[0, 0], [imgHeight, imgWidth]];
+
+        const map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: -5,
+            maxZoom: 2,
+            zoomControl: true,
+            attributionControl: false
+        }).setView([imgHeight / 2, imgWidth / 2], 0);
+
+        L.imageOverlay('/static/merged_result.jpg', imageBounds).addTo(map);
+        map.setMaxBounds(imageBounds);
+
+        const drawnItems = new L.FeatureGroup().addTo(map);
+
+        const drawControl = new L.Control.Draw({
+            edit: { featureGroup: drawnItems },
+            draw: {
+                polygon: false,
+                polyline: false,
+                rectangle: false,
+                circle: false,
+                marker: true,
+                circlemarker: false
+            }
+        });
+        map.addControl(drawControl);
+
+        map.on(L.Draw.Event.CREATED, function (e) {
+            drawnItems.addLayer(e.layer);
+        });
+
+        fetch('/geojson')
+            .then(res => res.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, color: 'red' }),
+                    onEachFeature: (feature, layer) => drawnItems.addLayer(layer)
+                });
+            });
+
+        function saveGeoJSON() {
+            const geojson = drawnItems.toGeoJSON();
+            fetch('/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(geojson)
+            }).then(res => res.json())
+              .then(data => alert(data.status));
+        }
+    </script>
+</body>
+</html>
