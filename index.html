@@ -1,0 +1,52 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oil Palm Detection GUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        input[type=file], button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⭐ Oil Palm Tree Detection</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Select Drone Image(s) (.JPG):</label>
+        <input type="file" name="images" multiple required>
+        <button type="submit">⏳ Run Full Detection Pipeline</button>
+    </form>
+</div>
+<div class="footer">
+    &copy; 2025 Oil Palm AI. All rights reserved.
+</div>
+</body>
+</html>

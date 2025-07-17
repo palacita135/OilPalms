@@ -1,0 +1,8 @@
+ultralytics
+opencv-python
+torch
+scikit-learn
+rasterio
+piexif
+tqdm
+pillow

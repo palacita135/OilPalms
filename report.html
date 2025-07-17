@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oil Palm Detection Pipeline</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h1 class="mb-4">Oil Palm Detection Pipeline</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="mb-5">
+        <label class="form-label">Upload drone imagery (.JPG)</label>
+        <input class="form-control mb-3" type="file" name="image" accept="image/jpeg" required>
+        <button class="btn btn-success" type="submit">Start Detection</button>
+    </form>
+
+    {% if status %}
+        <div class="alert alert-info">
+            <strong>Status:</strong> {{ status }}
+        </div>
+    {% endif %}
+
+    {% if result_ready %}
+        <a href="/report" class="btn btn-primary">View Report</a>
+    {% endif %}
+</div>
+</body>
+</html>
